@@ -1,14 +1,15 @@
+'use server'
 import { cache } from 'react'
 import clientPromise from './utilis'
-import { Collection, Db, MongoClient } from 'mongodb'
+import { Collection, Db, ListDatabasesOptions, MongoClient } from 'mongodb'
 import { ObjectId } from 'mongodb'
+import { revalidatePath } from 'next/cache'
+
 let client : MongoClient
 let db :  Db;
 let guestbook : Collection; 
 
-export default class Game {
-    constructor(public name: string, public id?: ObjectId) {}
-}
+
 async function init() {
   if (db) return
   try {
@@ -27,19 +28,20 @@ async function init() {
 /////////////////
 /// Guestbook ///
 ////////////////
-type list={ name :string , id : string}[];
-export const getGuestbookEntries = cache(async () => {
+  type list={ name :string , _id : string};
+export const getGuestbookEntries =(async () => {
   try {
     if (!guestbook) await init()
 
-    const entries = (await guestbook
-      .find({})
+    const entries  = (await guestbook
+      .find()
       .map(entry => ({ ...entry, _id: entry._id.toString() }))
-      .toArray()) as  list;
+      .toArray()) as list[] ;
     return { entries }
   } catch (error) {
     return { error: 'Failed to fetch guestbook!' }
   }
+
 })
 
 export const createGuestbookEntry = async (name: string) => {
