@@ -1,12 +1,13 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { createGuestbookEntry } from './lib/Handler'
 import { revalidatePath } from 'next/cache';
+import { useRouter } from 'next/navigation';
 const GuestbookEntryForm = () => {
   const formRef = useRef<HTMLFormElement> (null);
-
-
+const [isPending,starttranstition] = useTransition()
+const router = useRouter();
   // client action calling a server action
   async function action(data : FormData) {
     let name=data.get("name") as string
@@ -15,6 +16,7 @@ const GuestbookEntryForm = () => {
       formRef.current.reset()
       }
      
+      starttranstition(()=>{ router.refresh()})
     }
 
   return (

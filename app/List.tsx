@@ -5,14 +5,19 @@ import { getGuestbookEntries } from "./lib/Handler"
 
 export const dynamic = 'force-dynamic'
 type list={ name :string , _id : string};
-const List = async() => {
-let arr=await getGuestbookEntries();
+async function  fetching()
+{
+  return await getGuestbookEntries();
+  
+}
 function iserror(arr : {entries: list[];
-    error?: undefined; } | { error: string;
-    entries?: undefined;}): arr is {entries: list[];
-        error?: undefined; }{
-    return arr.error === undefined;
-  }
+  error?: undefined; } | { error: string;
+  entries?: undefined;}): arr is {entries: list[];
+      error?: undefined; }{
+  return arr.error === undefined;
+}
+const List = async() => {
+let arr= await fetching();
 if(!iserror(arr))
    return<></>;
 
