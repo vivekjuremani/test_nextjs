@@ -1,6 +1,3 @@
-
-
-
 import { getGuestbookEntries } from "./lib/Handler"
 
 export const dynamic = 'force-dynamic'

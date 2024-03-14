@@ -4,19 +4,19 @@ import { useRef, useState, useTransition } from 'react'
 import { createGuestbookEntry } from './lib/Handler'
 import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
+import { _action } from './lib/_action';
 const GuestbookEntryForm = () => {
   const formRef = useRef<HTMLFormElement> (null);
 const [isPending,starttranstition] = useTransition()
 const router = useRouter();
   // client action calling a server action
   async function action(data : FormData) {
-    let name=data.get("name") as string
-    const result = await createGuestbookEntry(name)
-    if (formRef.current) {
-      formRef.current.reset()
-      }
+       _action(data);
+    // if (formRef.current) {
+    //   formRef.current.reset()
+    //   }
      
-      starttranstition(()=>{ router.refresh()})
+    //   starttranstition(()=>{ router.refresh()})
     }
 
   return (
